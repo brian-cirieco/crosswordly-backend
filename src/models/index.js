@@ -10,6 +10,7 @@ const db = {};
 
 let sequelize;
 if (process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = process.env.DATABASE_URL.slice(0, 9) + "/" + process.env.DATABASE_URL.slice(9);
   console.log("HERE", process.env.DATABASE_URL);
   sequelize = new Sequelize({
     database: process.env.DATABASE_URL,
