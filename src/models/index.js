@@ -10,6 +10,7 @@ const db = {};
 
 let sequelize;
 if (process.env.DATABASE_URL) {
+  console.log("HERE", process.env.DATABASE_URL);
   sequelize = new Sequelize({
     database: process.env.DATABASE_URL,
     dialect: "postgres",
