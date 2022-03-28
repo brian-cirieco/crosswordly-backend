@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { Word, Category, Definition } = require("../models");
 const loadDefinitions = require("../helpers/fetchDefinitions");
+const trie = require("../dictionary");
 
 router.get("", async (req, res, next) => {
   const term = req.query.term;
   try {
     if (!term) return res.status(200).json(await Word.findAll());
+    if (!trie.guess(term)) res.status(404).json({ msg: `${term} is not a valid word.` });
     let word = await Word.findOne({
       where: { word: term },
       include: {
@@ -19,9 +21,10 @@ router.get("", async (req, res, next) => {
       }
     });
 
+    if (!word) word = await Word.create({ word: term });
+
     if (!word.definitions.length) {
       // parse definition data from Free Dictionary API https://dictionaryapi.dev/
-      const wordId = word.id;
       word = await Promise.resolve(
         loadDefinitions(term)
         .then(async result => {
@@ -35,7 +38,7 @@ router.get("", async (req, res, next) => {
           categories.forEach(({ id, name }) => {
             defModels.push(...definitions[name].map(data => {
               return Definition.create({
-                wordId,
+                wordId: word.id,
                 categoryId: id,
                 ...data
               });
