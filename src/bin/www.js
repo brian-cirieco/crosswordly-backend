@@ -4,10 +4,13 @@
  * Module dependencies.
  */
 
+const fs = require("fs");
+const key = fs.readFileSync(__dirname + "/key.pem");
+const cert = fs.readFileSync(__dirname + "/cert.pem");
 const app = require("../app");
 const debug = require("debug")("backend:server");
-const http = require("http");
 const { sequelize } = require("../models");
+const https = require("https");
 
 /**
  * Get port from environment and store in Express.
@@ -20,7 +23,7 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+const server = https.createServer({ key, cert }, app);
 
 /**
  * Listen on provided port, on all network interfaces.
