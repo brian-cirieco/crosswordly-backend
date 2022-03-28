@@ -1,0 +1,24 @@
+{
+  "development": {
+    "username": "bcirieco_dev",
+    "password": "P0sT-T3n3Br@s-Lux",
+    "database": "crosswordly_development",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "bcirieco_dev",
+    "password": "P0sT-T3n3Br@s-Lux",
+    "database": "crosswordly_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false
+  },
+  "production": {
+    "username": "root",
+    "password": "root",
+    "database": "crosswordly_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
