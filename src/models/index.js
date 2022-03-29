@@ -10,9 +10,11 @@ const db = {};
 
 let sequelize;
 if (process.env.DATABASE_URL) {
-  sequelize = new Sequelize({
-    database: process.env.DATABASE_URL,
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
+    protocol: "postgres",
+    port: 5432,
+    logging: true,
     dialectOptions: {
       ssl: {
         require: true,
@@ -21,7 +23,6 @@ if (process.env.DATABASE_URL) {
     }
   });
 } else {
-  console.log("did not find environment variable")
   if (config.use_env_variable) {
     sequelize = new Sequelize(process.env[config.use_env_variable], config);
   } else {
