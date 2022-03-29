@@ -12,7 +12,7 @@ let sequelize;
 if (process.env.DATABASE_URL) {
   try {
     sequelize = new Sequelize({
-      database: process.env.DATABASE_URL,
+      database: process.env.DATABASE_URL + "sslmode=require",
       dialect: "postgres",
       dialectOptions: {
         ssl: {
