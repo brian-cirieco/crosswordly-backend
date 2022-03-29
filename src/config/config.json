@@ -15,10 +15,6 @@
     "logging": false
   },
   "production": {
-    "username": "root",
-    "password": "root",
-    "database": "crosswordly_production",
-    "host": "127.0.0.1",
     "dialect": "postgres"
   }
 }
