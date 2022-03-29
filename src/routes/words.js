@@ -21,7 +21,14 @@ router.get("", async (req, res, next) => {
       }
     });
 
-    if (!word) word = await Word.create({ word: term });
+    if (!word) word = await Word.create({
+      word: term
+    }, {
+      include: [{
+        association: "definitions",
+        include: ["category"]
+      }]
+    });
 
     if (!word.definitions.length) {
       // parse definition data from Free Dictionary API https://dictionaryapi.dev/
