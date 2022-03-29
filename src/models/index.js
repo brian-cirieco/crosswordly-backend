@@ -20,7 +20,6 @@ if (process.env.DATABASE_URL) {
       }
     }
   });
-  console.log(1)
 } else {
   if (config.use_env_variable) {
     sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -28,7 +27,6 @@ if (process.env.DATABASE_URL) {
     sequelize = new Sequelize(config.database, config.username, config.password, config);
   }
 }
-console.log(2)
 
 fs
   .readdirSync(__dirname)
@@ -40,13 +38,11 @@ fs
     db[model.name] = model;
   });
 
-console.log(3)
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
-console.log(4)
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
