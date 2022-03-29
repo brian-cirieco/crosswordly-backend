@@ -90,9 +90,9 @@ async function onListening() {
   const bind = typeof addr === "string"
     ? "pipe " + addr
     : "port " + addr.port;
-  console.log("before sync")
-  await sequelize.sync({ force: true });
-  console.log("before after sync")
+  sequelize.sync({ force: true })
+    .then(() => console.log("connection established"))
+    .catch(err => console.log("connection refused", err));
   // await sequelize.authenticate();
   debug("Listening on " + bind);
 }
