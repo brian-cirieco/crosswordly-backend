@@ -10,21 +10,19 @@ const db = {};
 
 let sequelize;
 if (process.env.DATABASE_URL) {
-  try {
-    sequelize = new Sequelize({
-      database: process.env.DATABASE_URL + "sslmode=require",
-      dialect: "postgres",
-      dialectOptions: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false
-        }
+  console.log("found DATABASE_URL environment variable");
+  sequelize = new Sequelize({
+    database: process.env.DATABASE_URL,
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
       }
-    });
-  } catch (err) {
-    console.error("there is an error here", err);
-  }
+    }
+  });
 } else {
+  console.log("did not find environment variable")
   if (config.use_env_variable) {
     sequelize = new Sequelize(process.env[config.use_env_variable], config);
   } else {

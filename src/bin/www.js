@@ -9,7 +9,9 @@ const key = fs.readFileSync(__dirname + "/key.pem");
 const cert = fs.readFileSync(__dirname + "/cert.pem");
 const app = require("../app");
 const debug = require("debug")("backend:server");
+console.log("before sequelize")
 const { sequelize } = require("../models");
+console.log("after sequelize")
 const https = require("https");
 
 /**
