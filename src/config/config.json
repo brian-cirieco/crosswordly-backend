@@ -17,7 +17,6 @@
   "production": {
     "use_env_variable": "DATABASE_URL",
     "dialect": "postgres",
-    "logging": "console.log",
     "dialectOptions": {
       "ssl": {
         "require": true,
