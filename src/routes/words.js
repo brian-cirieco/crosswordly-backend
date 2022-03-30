@@ -37,7 +37,8 @@ router.get("", async (req, res, next) => {
         .then(async result => {
           return [
             await Promise.all(Object.keys(result)
-              .map(category => Category.create({ name: category }))),
+              .map(async category =>
+                await Category.findOne({ where: { name: category } }))),
             result
           ];
         }).then(([categories, definitions]) => {
