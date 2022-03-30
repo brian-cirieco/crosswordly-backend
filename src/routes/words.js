@@ -3,9 +3,11 @@ const router = express.Router();
 const { Word, Category, Definition } = require("../models");
 const loadDefinitions = require("../helpers/fetchDefinitions");
 const trie = require("../dictionary");
+const { createTestScheduler } = require("jest");
 
 router.get("", async (req, res, next) => {
   const term = req.query.term;
+  let statusCode;
   try {
     if (!term) return res.status(200).json(await Word.findAll());
     if (!trie.guess(term)) res.status(404).json({ msg: `${term} is not a valid word.` });
@@ -21,16 +23,14 @@ router.get("", async (req, res, next) => {
       }
     });
 
-    if (!word) word = await Word.create({
-      word: term
-    }, {
-      include: [{
-        association: "definitions",
-        include: ["category"]
-      }]
-    });
+    if (!word) {
+      word = await Word.create({ word: term });
+      statusCode = 201;
+    } else {
+      statusCode = 200;
+    }
 
-    if (!word.definitions.length) {
+    if (statusCode === 201 || !word.definitions.length) {
       // parse definition data from Free Dictionary API https://dictionaryapi.dev/
       word = await Promise.resolve(
         loadDefinitions(term)
@@ -63,7 +63,7 @@ router.get("", async (req, res, next) => {
         })
       );
     }
-    return res.status(200).json(word);
+    return res.status(statusCode).json(word);
   } catch (err) {
     return next(err);
   }

@@ -86,10 +86,13 @@ describe("/words route", () => {
       })
     });
 
-  });
+    test("creates word if not found in database", async () => {
+      const { statusCode, body } = await request(app).get("/words?term=goddess");
+      expect(statusCode).toBe(201);
+      expect(body).toBeTruthy();
+      expect(body.definitions.length).toBe(3);
+    });
 
-  // describe("GET /words?term=hello", () => {
-  //   // test("returns ")
-  // });
+  });
 
 });
