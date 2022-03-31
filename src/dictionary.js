@@ -1,11 +1,9 @@
+const fs = require("fs");
 const Trie = require("./Trie");
-const dict = require("../dictionary.json");
 
 const trie = new Trie();
-
-Object.keys(dict).forEach(word =>
-  word.length >= 3
-  ? trie.insert(word)
-  : undefined);
+fs.readFileSync(__dirname + "/seeders/filteredWords.txt")
+  .toString().split("\n")
+  .forEach(word => trie.insert(word));
 
 module.exports = trie;

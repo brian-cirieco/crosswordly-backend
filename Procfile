@@ -1,1 +1,1 @@
-web: npm start
+web: cd src && npx sequelize db:seed:undo:all && npx sequelize db:seed:all && cd .. && npm start

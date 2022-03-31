@@ -3,7 +3,6 @@ const router = express.Router();
 const { Word, Category, Definition } = require("../models");
 const loadDefinitions = require("../helpers/fetchDefinitions");
 const trie = require("../dictionary");
-const { createTestScheduler } = require("jest");
 
 router.get("", async (req, res, next) => {
   const term = req.query.term;

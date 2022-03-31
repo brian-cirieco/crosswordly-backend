@@ -33,7 +33,6 @@ describe("/words route", () => {
       const { statusCode, body } = await request(app).get("/words?term=hello");
       expect(statusCode).toBe(200);
       expect(body.definitions.length).toBe(7);
-      console.log(body.definitions)
       expect(body).toEqual({
         id: 1, word: "hello",
         definitions: [
