@@ -3,10 +3,10 @@ const router = express.Router();
 // const trie = require("../seed");
 const Board = require("../Board");
 
-router.get("/:rootWord", (req, res, next) => {
+router.get("", (req, res, next) => {
   try {
-    if (!req.params.rootWord.length) throw new Error();
-    const board = new Board(req.params.rootWord);
+    if (!req.query.letters) throw new Error();
+    const board = new Board(req.query.letters);
     board.genBoard();
     const words = board.activeWords;
     const crossword = board.rows;
