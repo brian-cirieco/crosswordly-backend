@@ -162,6 +162,7 @@ class Board {
     let word = words.pop();
     this.placeWord(word, startX, startY, isHorizontal);
     placedWords.push(new Word(word, startX, startY, isHorizontal));
+    this.activeWords[word] = placedWords[0].getCoords();
 
     while (words.length && placedWords.length < maxWords) {
       words.sort(() => 0.5 - Math.random());

@@ -362,6 +362,7 @@ describe("Board class", () => {
         ['i', _, _, _, 'l', _, _, _, _],
         ['b', _, _, _, 'e', _, _, _, _]
       ]);
+      expect(Object.keys(b.activeWords).length).toBe(10);
     });
   });
   
