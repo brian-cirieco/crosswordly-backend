@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { Word, Category, Definition } = require("../models");
+const { Word, Category, Definition, Dictionary } = require("../models");
 const loadDefinitions = require("../helpers/fetchDefinitions");
-const trie = require("../dictionary");
+const guessWord = require("../helpers/guessWordFromJSON");
 
 router.get("", async (req, res, next) => {
   const term = req.query.term;
   let statusCode;
   try {
+    const { trieJSON } = await Dictionary.findOne({ where: { id: 1 } });
     if (!term) return res.status(200).json(await Word.findAll());
-    if (!trie.guess(term)) res.status(404).json({ msg: `${term} is not a valid word.` });
+    if (!guessWord(trieJSON, term)) res.status(404).json({ msg: `${term} is not a valid word.` });
     let word = await Word.findOne({
       where: { word: term },
       include: {
@@ -65,16 +66,7 @@ router.get("", async (req, res, next) => {
     }
     return res.status(statusCode).json(word);
   } catch (err) {
-    return next(err);
-  }
-});
-
-router.get("/random", async (req, res, next) => {
-  try {
-    const words = await Word.findAll();
-    const { word } = words[Math.floor(Math.random() * words.length)];
-    return res.status(200).json(word);
-  } catch (err) {
+    console.log(err);
     return next(err);
   }
 });

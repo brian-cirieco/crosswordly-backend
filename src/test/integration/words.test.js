@@ -1,7 +1,8 @@
 process.env.NODE_ENV = "test";
 
 const request = require("supertest");
-const { sequelize, Word, Category } = require("../../models");
+const { sequelize, Word, Dictionary } = require("../../models");
+const populateTrie = require("../../helpers/populateTrie")
 const app = require("../../app.js");
 
 describe("/words route", () => {
@@ -19,7 +20,9 @@ describe("/words route", () => {
       { name: "conjunction" },
       { name: "interjection" }
     ], {});
-  });
+    const trie = await populateTrie();
+    await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
+  }, 10000);
 
   describe("GET /words", () => {
     test("returns list of all words", async () => {

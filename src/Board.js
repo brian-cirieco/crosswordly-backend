@@ -1,16 +1,21 @@
 'use strict';
 
 const Word = require("./Word");
-const trie = require("./dictionary");
+const populateTrie = require("./helpers/populateTrie");
 
 /** Board class that generates crossword puzzle */
 class Board {
   constructor(letters, height=1, width=0) {
     this.height = height;
     this.width = width;
+    this.letters = letters;
     this.rows = Array.from(new Array(height)).map(() => new Array(width).fill(null));
-    this.words = trie.getWordsFrom(letters);
     this.activeWords = {};
+  }
+
+  getWords = async () => {
+    const trie = await populateTrie();
+    return trie.getWordsFrom(this.letters);
   }
 
   get = () => this.rows;
@@ -155,7 +160,8 @@ class Board {
     }
   };
 
-  genBoard = (startX=0, startY=0, maxWords=5) => {
+  genBoard = async (startX=0, startY=0, maxWords=5) => {
+    this.words = await this.getWords();
     const words = Array.from(this.words).sort(() => 0.5 - Math.random());
     const placedWords = [];
     let isHorizontal = Math.round(Math.random()) === 1;
@@ -206,7 +212,6 @@ class Board {
       }
     }
   };
-  
 }
 
 module.exports = Board;

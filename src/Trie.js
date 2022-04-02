@@ -48,6 +48,18 @@ class Trie {
     }
     return words;
   };
+
+  toJSON = (node=this.root) => {
+    const trie = {};
+    if (!node) return;
+    if (node.isWord) trie.isWord = true;
+    for (const n of node.children) {
+      if (!n) continue;
+      trie[n.char] = this.toJSON(n);
+      if (n.isWord) trie.isWord = true;
+    }
+    return trie;
+  }
 }
 
 module.exports = Trie;
