@@ -17,15 +17,11 @@ module.exports = {
 
     try {
       await populateTrie().then(async result => {
-        return Dictionary.create({ id: 1, trieJSON: result.toJSON() });
+        return Dictionary.create({ language: "en", trieJSON: result.toJSON() });
       });
     } catch (err) {
       console.error(err);
     }
-    
-    
-    // await queryInterface.bulkInsert('dictionary', [{ trieJSON: trie.toJSON() }], {});
-    
   },
 
   async down (queryInterface, Sequelize) {

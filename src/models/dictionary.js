@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Dictionary.init({
+    language: {
+      type: DataTypes.STRING(3),
+      primaryKey: true
+    },
     trieJSON: {
       type: DataTypes.JSON,
       allowNull: false,
@@ -21,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    tableName: "dictionary",
+    tableName: "dictionaries",
     modelName: "Dictionary",
     timestamps: false
   });

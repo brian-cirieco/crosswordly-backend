@@ -10,7 +10,7 @@ describe("Board class", () => {
   beforeAll(async () => {
     await sequelize.sync({ force: true });
     const trie = await populateTrie();
-    await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
+    await Dictionary.create({ language: "en", trieJSON: trie.toJSON() });
   }, 20000);
 
   beforeEach(() => {

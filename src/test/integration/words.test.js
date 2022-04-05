@@ -21,7 +21,7 @@ describe("/words route", () => {
       { name: "interjection" }
     ], {});
     const trie = await populateTrie();
-    await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
+    await Dictionary.create({ language: "en", trieJSON: trie.toJSON() });
   }, 12000);
 
   describe("GET /words", () => {

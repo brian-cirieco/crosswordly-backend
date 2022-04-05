@@ -5,10 +5,10 @@ const loadDefinitions = require("../helpers/fetchDefinitions");
 const guessWord = require("../helpers/guessWordFromJSON");
 
 router.get("", async (req, res, next) => {
-  const term = req.query.term;
+  const { term, language } = req.query;
   let statusCode;
   try {
-    const { trieJSON } = await Dictionary.findOne({ where: { id: 1 } });
+    const { trieJSON } = await Dictionary.findOne({ where: { language: (language || "en") } });
     if (!term) return res.status(200).json(await Word.findAll());
     if (!guessWord(trieJSON, term)) res.status(404).json({ msg: `${term} is not a valid word.` });
     let word = await Word.findOne({

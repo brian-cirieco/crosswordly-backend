@@ -15,10 +15,10 @@ class Board {
     this.activeWords = {};
   }
 
-  getWords = async () => {
+  getWords = async (language) => {
     // const trie = await populateTrie();
     // return trie.getWordsFrom(this.letters);
-    const { trieJSON } = await Dictionary.findOne({ where: { id: 1 } });
+    const { trieJSON } = await Dictionary.findOne({ where: { language: language || "en" } });
     return getWordsFromJSON(trieJSON, this.letters);
   }
 

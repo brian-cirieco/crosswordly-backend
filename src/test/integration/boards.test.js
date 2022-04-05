@@ -11,7 +11,7 @@ describe("GET /boards route integration tests", () => {
   beforeAll(async () => {
     await sequelize.sync({ force: true });
     const trie = await populateTrie();
-    await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
+    await Dictionary.create({ language: "en", trieJSON: trie.toJSON() });
   }, 12000);
 
   test("throws error if letters query parameter not specified", async () => {
