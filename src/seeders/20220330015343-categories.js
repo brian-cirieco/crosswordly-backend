@@ -12,14 +12,14 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert('categories', [
-      { name: "noun" },
-      { name: "pronoun" },
-      { name: "verb" },
-      { name: "adjective" },
-      { name: "adverb" },
-      { name: "preposition" },
-      { name: "conjunction" },
-      { name: "interjection" }
+      { id: 1, name: "noun" },
+      { id: 2, name: "pronoun" },
+      { id: 3, name: "verb" },
+      { id: 4, name: "adjective" },
+      { id: 5, name: "adverb" },
+      { id: 6, name: "preposition" },
+      { id: 7, name: "conjunction" },
+      { id: 8, name: "interjection" }
     ], {});
   },
 

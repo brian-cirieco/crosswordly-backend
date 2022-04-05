@@ -12,7 +12,7 @@ describe("GET /boards route integration tests", () => {
     await sequelize.sync({ force: true });
     const trie = await populateTrie();
     await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
-  }, 10000);
+  }, 12000);
 
   test("throws error if letters query parameter not specified", async () => {
     const { statusCode, body } = await request(app).get("/boards");
