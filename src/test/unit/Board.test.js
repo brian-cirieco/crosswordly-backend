@@ -1,9 +1,17 @@
 process.env.NODE_ENV = "test";
 const Board = require("../../Board");
+const populateTrie = require("../../helpers/populateTrie");
+const { sequelize, Dictionary } = require("../../models");
 
 describe("Board class", () => {
   const _ = null, WIDTH = 5, HEIGHT = 6;
-  let b;
+  let b, trieJSON;
+
+  beforeAll(async () => {
+    await sequelize.sync({ force: true });
+    const trie = await populateTrie();
+    await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
+  }, 20000);
 
   beforeEach(() => {
     b = new Board('likeable', HEIGHT, WIDTH);
@@ -346,15 +354,20 @@ describe("Board class", () => {
 
   describe("genBoard method", () => {
     test("generates board matrix properly", async () => {
-      Math.random = jest.fn(() => 1);
+      Math.random = jest.fn(() => 0.5);
       await b.genBoard(0, 0, 10);
       expect(b.rows).toEqual([
-        ['l',  'i',  'k', 'e', 'a',  'b', 'l', 'e', _, _, 'l', 'i', 'a', 'b', 'l', 'e'],
-        ['i', _, _, _, _, 'a', _, _, _, _, 'i',  _, _, _, _, _],
-        ['k', _, _, _, 'l', 'i', 'k', 'a', 'b', 'l', 'e', _, _, _, _, _],
-        ['e', _, _, _, _, _, _, _, 'a', _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, 'b', 'a', 'l', 'e', _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _, 'l', _, _, _, _, _, _, _]
+        ['b', 'a',  'k','e', _, 'e', _],
+        ['a', _, _, 'e', 'e', 'l', 'a'],
+        ['k', _, _, 'l', _, 'l', _],
+        [_, _, _, 'l', _, 'a', _],
+        [_, 'e', 'b', 'i', _, _, _],
+        [_, 'b', _, 'k', 'b', 'i', _],
+        [_, 'l', _, _, _, _, _],
+        ['e', 'i', 'b', _, _, _, _],
+        ['l', _, _, _, _, _, _],
+        ['l', _, _, _, _, _, _],
+        ['i', _, _, _, _, _, _]
       ]);
       expect(Object.keys(b.activeWords).length).toBe(10);
     });

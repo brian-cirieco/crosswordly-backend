@@ -22,7 +22,7 @@ describe("/words route", () => {
     ], {});
     const trie = await populateTrie();
     await Dictionary.create({ id: 1, trieJSON: trie.toJSON() });
-  }, 10000);
+  }, 12000);
 
   describe("GET /words", () => {
     test("returns list of all words", async () => {

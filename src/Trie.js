@@ -33,7 +33,7 @@ class Trie {
   getWordsFrom = (letters, maxDepth=letters.length, node=this.root, word="") => {
     const words = [];
     const visited = {};
-    if (node.isWord) words.push(word);
+    if (node.isWord && word.length >= 3) words.push(word);
     if (!letters.length || !node || word.length >= maxDepth) return words;
     for (let i = 0; i < letters.length; i++) {
       if (!visited[letters[i]]) visited[letters[i]] = true;

@@ -1,7 +1,7 @@
 function getWordsFromJSON(trieJSON, letters, maxDepth=letters.length, word="") {
   const words = [];
   const visited = {};
-  if (trieJSON.isWord) words.push(word);
+  if (trieJSON.isWord && word.length >= 3) words.push(word);
   if (!letters.length || word.length >= maxDepth) return words;
   for (let i = 0; i < letters.length; i++) {
     const char = letters[i];

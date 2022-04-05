@@ -32,9 +32,9 @@ describe("getWordsFromJSON helper function unit tests", () => {
     expect(words).toEqual([ "hel", "hell", "hello", "leo", "lol" ]);
   });
 
-  test("will only return 'hi', omitting other words", () => {
+  test("will not return words whose length is less than 3", () => {
     const words = getWordsFromJSON(trieJSON, "hi");
-    expect(words).toEqual(["hi"]);
+    expect(words).toEqual([]);
   });
 
   test("will return empty array if no words match letters provided", () => {

@@ -8,7 +8,7 @@ async function populateTrie() {
   const trie = new Trie();
   const words = await wordnet.list();
   words.forEach(word => {
-    if (!filter.check(word) && /^[a-z]+$/.test(word)) trie.insert(word);
+    if (word.length >= 3 && !filter.check(word) && /^[a-z]+$/.test(word)) trie.insert(word);
   });
   return trie;
 }

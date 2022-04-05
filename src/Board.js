@@ -1,7 +1,9 @@
 'use strict';
 
 const Word = require("./Word");
-const populateTrie = require("./helpers/populateTrie");
+// const populateTrie = require("./helpers/populateTrie");
+const getWordsFromJSON = require("./helpers/getWordsFromJSON");
+const { Dictionary } = require("./models");
 
 /** Board class that generates crossword puzzle */
 class Board {
@@ -14,8 +16,10 @@ class Board {
   }
 
   getWords = async () => {
-    const trie = await populateTrie();
-    return trie.getWordsFrom(this.letters);
+    // const trie = await populateTrie();
+    // return trie.getWordsFrom(this.letters);
+    const { trieJSON } = await Dictionary.findOne({ where: { id: 1 } });
+    return getWordsFromJSON(trieJSON, this.letters);
   }
 
   get = () => this.rows;
@@ -211,6 +215,10 @@ class Board {
         if (foundMatch) break;
       }
     }
+    return {
+      words: this.activeWords,
+      crossword: this.rows
+    };
   };
 }
 
