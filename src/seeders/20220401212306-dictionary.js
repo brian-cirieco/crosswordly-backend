@@ -15,9 +15,14 @@ module.exports = {
      * }], {});
     */
 
-    await populateTrie().then(async result => {
-      return Dictionary.create({ id: 1, trieJSON: result.toJSON() });
-    });
+    try {
+      await populateTrie().then(async result => {
+        return Dictionary.create({ id: 1, trieJSON: result.toJSON() });
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    
     
     // await queryInterface.bulkInsert('dictionary', [{ trieJSON: trie.toJSON() }], {});
     
