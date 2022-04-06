@@ -10,7 +10,7 @@ router.get("", async (req, res, next) => {
   try {
     const { trieJSON } = await Dictionary.findOne({ where: { language: (language || "en") } });
     if (!term) return res.status(200).json(await Word.findAll());
-    if (!guessWord(trieJSON, term)) res.status(404).json({ msg: `${term} is not a valid word.` });
+    if (!guessWord(trieJSON, term)) return res.status(404).json({ msg: `${term} is not a valid word.` });
     let word = await Word.findOne({
       where: { word: term },
       include: {
@@ -66,7 +66,9 @@ router.get("", async (req, res, next) => {
     }
     return res.status(statusCode).json(word);
   } catch (err) {
-    console.log(err);
+    if (statusCode === 201 || statusCode === 200) {
+      return res.status(statusCode).json({ word: term, msg: `No definitions found for ${term}. Word may be obsolete.` })
+    }
     return next(err);
   }
 });

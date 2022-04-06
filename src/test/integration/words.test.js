@@ -7,7 +7,7 @@ const app = require("../../app.js");
 
 describe("/words route", () => {
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     await sequelize.sync({ force: true });
     await Word.create({ word: "hello" });
     await sequelize.getQueryInterface().bulkInsert("categories", [
@@ -115,6 +115,12 @@ describe("/words route", () => {
       expect(statusCode).toBe(201);
       expect(body.definitions.length).toBe(8);
     });
+
+    test("returns error message if word exists on trie, but no definitions were found via the API", async () => {
+      const { statusCode, body } = await request(app).get("/words?term=albe");
+      expect(statusCode).toBe(201);
+      expect(body).toEqual({ word: "albe", msg: "No definitions found for albe. Word may be obsolete." });
+    }, 20000);
 
   });
 
