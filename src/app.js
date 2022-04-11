@@ -7,6 +7,7 @@ const boardsRouter = require("./routes/boards");
 const wordsRouter = require("./routes/words");
 const usersRouter = require("./routes/users");
 const dictionariesRouter = require("./routes/dictionaries");
+const authRouter = require("./routes/auth");
 const app = express();
 
 app.use(logger("dev"));
@@ -19,5 +20,6 @@ app.use("/users", usersRouter);
 app.use("/words", wordsRouter);
 app.use("/boards", boardsRouter);
 app.use("/dictionaries", dictionariesRouter);
+app.use("/auth", authRouter);
 
 module.exports = app;
