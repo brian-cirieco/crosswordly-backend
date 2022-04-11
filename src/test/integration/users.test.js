@@ -121,6 +121,14 @@ describe("users routes", () => {
       expect(body).toEqual({});
     });
 
+    test("throws status code 404 if provided id does not exist", async () => {
+      const { statusCode, body } = await request(app)
+        .patch(`/users/${uuid()}`);
+
+      expect(statusCode).toBe(404);
+      expect(body).toEqual({ msg: "User could not be found" });
+    });
+
   });
 
   describe("DELETE /users/:id", () => {

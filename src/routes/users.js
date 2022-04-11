@@ -46,6 +46,7 @@ router.patch("/:id", async (req, res, next) => {
   const { highScore } = req.body;
   try {
     const user = await User.findOne({ where: { id: req.params.id } });
+    if (!user) return res.status(404).json({ msg: "User could not be found" });
     user.highScore = highScore;
     await user.save();
     return res.status(200).json(user);
