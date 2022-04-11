@@ -1,4 +1,6 @@
 'use strict';
+
+const { v4: uuid } = require("uuid");
 const {
   Model
 } = require('sequelize');
@@ -17,19 +19,15 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    toJSON() {
-      return { ...this.get(), uuid: undefined };
-    }
+    // toJSON() {
+    //   // return { ...this.get() };
+    // }
   }
   User.init({
-    uuid: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      validate: {
-        isUUID: true,
-        notEmpty: { msg: "uuid cannot be empty" }
-      }
+      primaryKey: true
     },
     username: {
       type: DataTypes.STRING,
@@ -53,14 +51,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: { msg: "password cannot be empty" }
-      }
-    },
-    totalScore: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
-      validate: {
-        min: 0
       }
     },
     highScore: {
