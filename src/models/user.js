@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "wordId"
       });
     }
-
-    // toJSON() {
-    //   // return { ...this.get() };
-    // }
   }
   User.init({
     id: {
