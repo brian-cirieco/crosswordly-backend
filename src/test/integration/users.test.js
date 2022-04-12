@@ -4,6 +4,7 @@ const request = require("supertest");
 const { sequelize, User } = require("../../models");
 const app = require("../../app.js");
 const { v4: uuid } = require("uuid");
+const bcrypt = require("bcrypt");
 
 describe("users routes", () => {
   let user1, user2, user3;
@@ -70,7 +71,7 @@ describe("users routes", () => {
         .send(userData);
       
       expect(statusCode).toBe(201);
-      expect(body).toEqual(expect.objectContaining({ highScore: 0, ...userData }))
+      expect(body).toEqual({ msg: "User successfully registered." });
     });
 
     test("throws server error when username not specified", async () => {
@@ -111,7 +112,7 @@ describe("users routes", () => {
         .send({ highScore: 30 });
 
       expect(statusCode).toBe(200);
-      expect(body).toEqual({ ...user1, highScore: 30 });
+      expect(body).toEqual({ highScore: 30 });
     });
 
     test("throws error when updating without high score", async () => {

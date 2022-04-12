@@ -36,8 +36,8 @@ router.post("", async (req, res, next) => {
   const { username, displayName, password } = req.body;
   try {
     const hashedPwd = await bcrypt.hash(password, 12);
-    const user = await User.create({ username, displayName, password: hashedPwd });
-    return res.status(201).json(user);
+    await User.create({ username, displayName, password: hashedPwd });
+    return res.status(201).json({ msg: "User successfully registered." });
   } catch(err) {
     return next(err);
   }
@@ -51,7 +51,7 @@ router.patch("/:id", async (req, res, next) => {
     if (!user) return res.status(404).json({ msg: "User could not be found" });
     user.highScore = highScore;
     await user.save();
-    return res.status(200).json(user);
+    return res.status(200).json({ highScore });
   } catch (err) {
     return next(err);
   }
