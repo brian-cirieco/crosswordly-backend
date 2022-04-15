@@ -217,6 +217,7 @@ class Board {
     }
     return {
       words: this.activeWords,
+      numWords: placedWords.length,
       crossword: this.rows
     };
   };

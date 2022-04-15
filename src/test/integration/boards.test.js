@@ -37,7 +37,7 @@ describe("GET /boards route integration tests", () => {
       .query({ letters: "hello" });
     
     expect(statusCode).toBe(200);
-    expect(Object.keys(body.words).length).toBe(3);
+    expect(body.numWords).toBe(3);
     expect(body.crossword).toEqual([
       [ 'o', 'l', 'l' ],
       [ 'l',  _ ,  _  ],
