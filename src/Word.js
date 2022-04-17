@@ -1,4 +1,11 @@
 class Word {
+  /**
+   * Word class storing start and end coordinates of word on crossword board
+   * @param {string} word
+   * @param {number} x - initial row index of word
+   * @param {number} y - initial column index of word
+   * @param {boolean} isHorizontal
+   */
   constructor(word, x, y, isHorizontal) {
     this.word = word;
     this.isHorizontal = isHorizontal;
@@ -14,25 +21,38 @@ class Word {
     }
   }
 
-  get() {
-    return this.word;
-  }
+  /**
+   * getter function returning word string
+   * @returns {string}
+   */
+  get = () => this.word;
 
-  charIdx(char) {
-    return this.charMap[char];
-  }
+  /**
+   * get first letter from charMap
+   * @param {string} char 
+   * @returns {string|undefined} first index of char
+   */
+  charIdx = char => this.charMap[char];
 
-  at(idx) {
-    return this.word[idx];
-  }
+  /**
+   * get character at index
+   * @param {number} idx 
+   * @returns {string|undefined} character at idx
+   */
+  at = idx => this.word[idx];
 
-  has(char) {
-    return this.charMap[char] !== undefined;
-  }
+  /**
+   * find whether char exists in word
+   * @param {string} char 
+   * @returns {boolean} true if char exists in word
+   */
+  has = char => this.charMap[char] !== undefined;
 
-  getCoords() {
-    return this.coords;
-  }
+  /**
+   * getter method for word start and end coordinates
+   * @returns {{ xi: number, xf: number, yi: number, yf: number }}
+   */
+  getCoords = () => this.coords;
 }
 
 module.exports = Word;

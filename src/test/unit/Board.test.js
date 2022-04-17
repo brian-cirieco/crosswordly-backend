@@ -355,8 +355,8 @@ describe("Board class", () => {
   describe("genBoard method", () => {
     test("generates board matrix properly", async () => {
       Math.random = jest.fn(() => 0.5);
-      await b.genBoard(0, 0, 10);
-      expect(b.rows).toEqual([
+      const { words, crossword, numWords } = await b.genBoard(10, 0, 0);
+      expect(crossword).toEqual([
         ['b', 'a',  'k','e', _, 'e', _],
         ['a', _, _, 'e', 'e', 'l', 'a'],
         ['k', _, _, 'l', _, 'l', _],
@@ -369,7 +369,9 @@ describe("Board class", () => {
         ['l', _, _, _, _, _, _],
         ['i', _, _, _, _, _, _]
       ]);
-      expect(Object.keys(b.activeWords).length).toBe(10);
+      expect(numWords).toBe(10);
+      expect(words instanceof Object).toBeTruthy();
+      expect(Object.keys(words).length).toBe(10);
     });
   });
   

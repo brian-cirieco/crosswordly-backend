@@ -1,7 +1,6 @@
 'use strict';
 
 const Word = require("./Word");
-// const populateTrie = require("./helpers/populateTrie");
 const getWordsFromJSON = require("./helpers/getWordsFromJSON");
 const { Dictionary } = require("./models");
 
@@ -15,25 +14,44 @@ class Board {
     this.activeWords = {};
   }
 
-  getWords = async (language) => {
-    // const trie = await populateTrie();
-    // return trie.getWordsFrom(this.letters);
+  /**
+   * gathers trie data structure from database, and returns 
+   * @param {string} language - language code for dictionary
+   * @returns {Array<string>} array of words created using this.letters
+   */
+  getWords = async language => {
     const { trieJSON } = await Dictionary.findOne({ where: { language: language || "en" } });
     return getWordsFromJSON(trieJSON, this.letters);
-  }
+  };
 
+  /**
+   * getter function for this.rows
+   * @returns {Array<Array<string>>} 2D array of characters representing crossword board
+   */
   get = () => this.rows;
 
+  /**
+   * getter function for individual value in 2D array this.rows
+   * @param {number} x - row index of cell
+   * @param {number} y - column index of cell
+   * @returns {string} value at coordinates (x, y) of this.rows
+   */
   at = (x, y) => {
     if (y === undefined) return this.rows[x]; 
     return this.rows[x][y];
   };
 
+  /** getter function for this.rows number of columns */
   getWidth = () => this.width;
   
+  /** getter function for this.rows number of rows */
   getHeight = () => this.height;
 
-  /** adjusts width of board */
+  /**
+   * adjusts number of columns in this.rows
+   * @param {number} newWidth - updated number of columns
+   * @returns {void}
+   */
   setWidth = newWidth => {
     if (newWidth <= 0) throw new Error("newWidth must be greater than zero");
     else if (newWidth === this.width) return;
@@ -49,7 +67,11 @@ class Board {
     this.width = newWidth;
   };
 
-  /** adjusts height of board */
+  /**
+   * adjusts number of rows in this.rows
+   * @param {number} newHeight - updated number of rows
+   * @returns {void}
+   */
   setHeight = newHeight => {
     if (newHeight <= 0) throw new Error("newHeight must greater than zero");
     else if (newHeight === this.height) return;
@@ -63,14 +85,25 @@ class Board {
     this.height = newHeight;
   };
 
+  /**
+   * Adjusts dimension of this.rows 2D array
+   * @param {number} newHeight - updated number of rows
+   * @param {number} newWidth - updated number of columns
+   * @returns {void}
+   */
   setDimensions = (newHeight, newWidth) => {
     this.setWidth(newWidth);
     this.setHeight(newHeight);
   };
 
-  /** returns true when all the following cells, relative to cell at (x, y), are blank:
+  /** Returns true when all the following cells, relative to cell at (x, y), are blank:
    *  - horizontally: (x, y + 1), (x + 1, y), (x - 1, y);
    *  - vertically: (x + 1, y), (x, y - 1), (x, y + 1);
+   * @param {number} x - row index of cell to check for conflicting adjacent cells
+   * @param {number} y - column index of cell to check for conflicting adjacent cells
+   * @param {boolean} isHorizontal - true: x coordinate is constant; false: y coordinate is constant
+   * @param {number} intersectionIdx - potential intersection index of an active word with word
+   * @returns {boolean} whether cells adjacent to cell at row x, column y are all blank, with the exception of those at intersectionIdx
    */
   hasBlankAdjacentCells = (x, y, isHorizontal, intersectionIdx) => {
     if (isHorizontal) {
@@ -93,6 +126,15 @@ class Board {
     return true;
   };
 
+  /**
+   * Checks whether word can be placed at x and y
+   * @param {string} word - string to check placement potential
+   * @param {number} x - starting row index of word
+   * @param {number} y - starting column index of word
+   * @param {boolean} isHorizontal - true: x coordinate is constant; false: y coordinate is constant
+   * @param {number} intersectionIdx - potential intersection index of an active word with word
+   * @returns {boolean} - whether word can be placed at { x, y }
+   */
   canPlaceWord = (word, x, y, isHorizontal, intersectionIdx) => {
     if (isHorizontal === undefined) throw new Error("must specify isHorizontal as true or false");
     if (x < 0 || y < 0) return false;
@@ -135,6 +177,14 @@ class Board {
     return true;
   };
 
+  /**
+   * Places word on this.rows
+   * @param {string} word - string to place on board
+   * @param {number} x - row coordinate
+   * @param {number} y - column coordinate
+   * @param {boolean} isHorizontal - true: x coordinate is constant; false: y coordinate is constant
+   * @returns {void}
+   */
   placeWord = (word, x, y, isHorizontal) => {
     if (isHorizontal === undefined) throw new Error("must specify isHorizontal as true or false");
     if (x < 0 || y < 0) throw new Error("x and y must be positive integers or zero");
@@ -159,24 +209,43 @@ class Board {
       for (i = 0; i < word.length; i++) {
         this.rows[x + i][y] = word[i];
       }
-      
-      return [x + i - 1, y];
     }
   };
 
-  genBoard = async (startX=0, startY=0, maxWords=5) => {
+  /**
+   * Generates 2D array that represents the crossword puzzle alongside:
+   * - words and their coordinates as Object
+   * - number of words present
+   * - 2D array of characters representing the crossword board
+   * @param {number} maxWords - upper limit of words allowed on crossword 
+   * @param {number} startX - x coordinate of first word
+   * @param {number} startY - y coordinate of first word
+   * @yields {{ words: Object, numWords: number, crossword: Array<Array<string>> }}
+   */
+  genBoard = async (maxWords=5, startX=0, startY=0) => {
+  
+    // gather words from trie
     this.words = await this.getWords();
+
+    // randomly sort words
     const words = Array.from(this.words).sort(() => 0.5 - Math.random());
     const placedWords = [];
     let isHorizontal = Math.round(Math.random()) === 1;
+
+    // place first word
     let word = words.pop();
     this.placeWord(word, startX, startY, isHorizontal);
+
+    // update activeWords array with word coordinates
     placedWords.push(new Word(word, startX, startY, isHorizontal));
     this.activeWords[word] = placedWords[0].getCoords();
 
     while (words.length && placedWords.length < maxWords) {
+      // TODO remove next line
       words.sort(() => 0.5 - Math.random());
       word = words.pop();
+
+      // find valid position among placed words
       for (const placedWord of placedWords) {
         let foundMatch = false;
 
@@ -201,7 +270,7 @@ class Board {
             intersectionIdx = yi;
           }
 
-          // place word if deemed a valid spot
+          // place word if deemed a valid spot and update activeWords and placedWords accordingly
           if (this.canPlaceWord(word, x, y, isHorizontal, intersectionIdx)) {
             this.placeWord(word, x, y, !placedWord.isHorizontal);
             const newPlacedWord = new Word(word, x, y, !placedWord.isHorizontal);

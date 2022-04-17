@@ -6,9 +6,7 @@ router.get("", async (req, res, next) => {
   try {
     if (!req.query.letters) throw new Error();
     const board = new Board(req.query.letters);
-    return await board.genBoard().then((result) => {
-      return res.status(200).json(result);
-    });
+    return await board.genBoard(req.query.maxWords).then(result => res.status(200).json(result));
   } catch (err) {
     return next(err);
   }

@@ -3,6 +3,10 @@ const filter = require("leo-profanity");
 const Trie = require("../Trie");
 filter.loadDictionary();
 
+/**
+ * using wordnet's 140k words, this function loads all words into Trie data structure
+ * @returns {Trie}
+ */
 async function populateTrie() {
   await wordnet.init()
   const trie = new Trie();
