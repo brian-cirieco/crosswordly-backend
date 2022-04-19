@@ -4,7 +4,6 @@
 
 ## Table of Contents
 
-- [Introduction](#introduction)
 - [Description](#description)
   - [Technologies](#technologies)
 - [How To Use](#how-to-use)  
