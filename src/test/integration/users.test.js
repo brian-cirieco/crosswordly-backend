@@ -4,7 +4,6 @@ const request = require("supertest");
 const { sequelize, User } = require("../../models");
 const app = require("../../app.js");
 const { v4: uuid } = require("uuid");
-const bcrypt = require("bcrypt");
 
 describe("users routes", () => {
   let user1, user2, user3;
@@ -33,15 +32,23 @@ describe("users routes", () => {
   describe("GET /users", () => {
     test("fetches all users in db", async () => {
       const { body, statusCode } = await request(app)
-        .get("/users")
+        .get("/users");
       expect(statusCode).toBe(200);
       expect(body.length).toBe(3);
+    });
+
+    test("fetches only two users", async () => {
+      const { body, statusCode } = await request(app)
+        .get("/users")
+        .query({ limit: 2 });
+      expect(statusCode).toBe(200);
+      expect(body.length).toBe(2);
     });
 
     test("fetches top 2 users in db ordering them by high score", async () => {
       const { body, statusCode } = await request(app)
         .get("/users")
-        .send({ highScores: true, limit: 2 });
+        .query({ orderByHighScore: true, limit: 2 });
       expect(statusCode).toBe(200);
       expect(body.length).toBe(2);
       expect(body).toEqual([ user2, user3 ]);

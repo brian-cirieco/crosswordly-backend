@@ -5,14 +5,21 @@ const bcrypt = require("bcrypt");
 
 /* GET users listing. */
 router.get('', async (req, res, next) => {
-  const { highScores, limit } = req.body;
+  let users;
+  const { orderByHighScore, limit } = req.query;
   try {
-    const users = highScores
-      ? await User.findAll({
-        limit: limit,
+    if (orderByHighScore && limit) {
+      users = await User.findAll({
+        limit,
         order: [[ "highScore", "DESC" ]]
-      })
-      : await User.findAll();
+      });
+    } else if (orderByHighScore) {
+      users = await User.findAll({ order: [[ "highScore", "DESC" ]] });
+    } else if (limit) {
+      users = await User.findAll({ limit });
+    } else {
+      users = await User.findAll();
+    }
     return res.status(200).json(users);
   } catch (err) {
     return next(err);

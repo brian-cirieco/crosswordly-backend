@@ -14,8 +14,7 @@ describe("GET /dictionaries/:id", () => {
 
   test("returns JSON version of prefix trie, id=1 for english dictionary (140k words)", async () => {
     const { statusCode, body } = await request(app)
-      .get("/dictionaries")
-      .query({ lang: "en" });
+      .get("/dictionaries/en");
     expect(statusCode).toBe(200);
     expect(body instanceof Object).toBeTruthy();
     expect(body.h.e.l.l.o.isWord).toBeTruthy();
