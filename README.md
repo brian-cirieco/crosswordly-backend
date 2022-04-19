@@ -5,7 +5,8 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Technologies](#technologies)
+- [Description](#description)
+  - [Technologies](#technologies)
 - [How To Use](#how-to-use)  
   - [Installation](#installation)
   - [API Reference](#api-reference)
