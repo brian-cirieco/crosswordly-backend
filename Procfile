@@ -1,1 +1,1 @@
-web: npx sequelize:db:seed:undo:all && npx sequelize:db:seed:all && npm start
+web: npm start
