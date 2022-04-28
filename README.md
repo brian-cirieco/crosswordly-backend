@@ -95,7 +95,7 @@ If word is valid but does not yet exist in database, will store all word and def
 GET /words?term=hello
 ```
 
-*Result:*
+*Returns:*
 ```js
 {
   "id":2,
@@ -173,7 +173,7 @@ Generates a table containing the crossword puzzle, words, their coordinates on t
 ```js
 GET /boards?letters=abcdef
 ```
-*Result:*
+*Returns:*
 ```js
 {
   "words": {
@@ -199,7 +199,7 @@ GET /boards?letters=abcdef
 ```js
 GET /boards?letters=abcdef&maxWords=3
 ```
-*Result:*
+*Returns:*
 ```js
 {
   "words": {
@@ -222,7 +222,7 @@ GET /boards?letters=abcdef&maxWords=3
 
 #### **```/users```**
 
-Route for user accounts.
+Routes for user accounts.
 
 ```js
 GET /users?orderByHighScore=ORDER_BY_HIGHSCORES&limit=LIMIT
@@ -236,7 +236,7 @@ Parameters:
 ```js
 GET /users
 ```
-*Result:*
+*Returns:*
 
 ```js
 [
@@ -262,7 +262,7 @@ GET /users
 GET /users?orderByHighScore=true
 ```
 
-*Result*
+*Returns*
 ```js
 [
   {
@@ -287,7 +287,7 @@ GET /users?orderByHighScore=true
 GET /users?limit=1
 ```
 
-*Result*
+*Returns*
 ```js
 [
   {
@@ -305,7 +305,7 @@ GET /users?limit=1
 GET /users?orderByHighScore=true&limit=1
 ```
 
-*Result:*
+*Returns:*
 ```js
 [
   {
@@ -316,6 +316,95 @@ GET /users?orderByHighScore=true&limit=1
     "highScore": 30
   }
 ]
+```
+
+[Back To Top](#crosswordly-backend)
+
+```js
+GET /users/:id
+```
+Gathers data from user of id.
+
+*Example for test user:*
+```js
+GET /users/9b72d3e7-c149-4fd2-8f0a-9e55ea0ca44e
+```
+
+*Returns:*
+```js
+{
+  "id": "9b72d3e7-c149-4fd2-8f0a-9e55ea0ca44e",
+  "username": "test1",
+  "displayName": "test1",
+  "password": "$2b$12$2ImIuYGn07zAXh6jeC3hwO7UMgMKJj3Efc4PfwFntEcseNEChSEVS",
+  "highScore": 0
+}
+```
+
+[Back To Top](#crosswordly-backend)
+
+```js
+POST /users
+```
+Creates new user - registration route. Hashes password with bcrypt.  
+
+*Example*
+Request body contains:
+```js
+{
+  username: "test",
+  displayName: "testDisplay",
+  password: "123"
+}
+```
+
+*Returns:*
+```js
+{ msg: "User successfully registered." }
+```
+
+[Back To Top](#crosswordly-backend)
+
+```js
+PATCH /users/:id
+```
+Updates user high score.  
+
+*Example:*
+
+```js
+PATCH /users/9b72d3e7-c149-4fd2-8f0a-9e55ea0ca44e
+```
+
+Request body contains:
+```js
+{
+  highScore: 100
+}
+```
+
+*Returns:*
+```js
+{ highScore: 100 }
+```
+
+[Back To Top](#crosswordly-backend)
+
+```js
+DELETE /users/:id
+```
+
+Deletes user if exists.
+
+*Example:*
+```js
+DELETE /useres/9b72d3e7-c149-4fd2-8f0a-9e55ea0ca44e
+```
+
+*Returns:*
+
+```js
+{ msg: "User has been deleted" }
 ```
 
 [Back To Top](#crosswordly-backend)
